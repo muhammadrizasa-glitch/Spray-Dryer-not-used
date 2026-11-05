@@ -43,9 +43,15 @@ input[type=range]{flex:1;accent-color:#378add}
 .m .v{font-size:18px;font-weight:500}
 .m .s{font-size:11px;color:var(--text-muted)}
 @media (max-width:560px){.grid{grid-template-columns:minmax(0,1fr)}}
+.zoombar{position:sticky;top:0;z-index:10;display:flex;justify-content:flex-end;padding:6px 10px 0;pointer-events:none}
+.zpill{pointer-events:auto;display:flex;align-items:center;gap:4px;background:var(--surface-1);border:0.5px solid var(--border-strong);border-radius:999px;padding:2px 8px;color:var(--text-secondary);font-size:10px}
+.zpill button{width:19px;height:19px;border-radius:50%;border:0.5px solid var(--border-strong);background:var(--page);color:var(--text-primary);font-size:13px;line-height:1;cursor:pointer;padding:0}
+.zpill input{width:88px;flex:none}
+#zo{min-width:28px;text-align:right}
 </style>
 </head>
 <body>
+<div class="zoombar"><div class="zpill"><svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="10.5" y1="10.5" x2="14" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><button type="button" id="zm" aria-label="Zoom out">&minus;</button><input type="range" id="zr" min="50" max="120" step="5" value="90" aria-label="Page zoom"><button type="button" id="zp" aria-label="Zoom in">+</button><span id="zo">90%</span></div></div>
 <div class="page">
 <h1>Ceramic spray dryer with lances</h1>
 <p class="sub">Slip from the lances dries into powder in hot air from the tower top. Move the sliders to see the effect.</p>
@@ -193,6 +199,10 @@ else tn='Temperature near normal: stable drying.';
 document.getElementById('pn').textContent=pn;
 document.getElementById('tn').textContent=tn;
 }
+function setZoom(z){z=Math.max(50,Math.min(120,z));document.getElementById('zr').value=z;document.getElementById('zo').textContent=z+'%';document.querySelector('.page').style.zoom=(z/90).toFixed(3);}
+document.getElementById('zr').addEventListener('input',function(){setZoom(+this.value);});
+document.getElementById('zm').onclick=function(){setZoom(+document.getElementById('zr').value-5);};
+document.getElementById('zp').onclick=function(){setZoom(+document.getElementById('zr').value+5);};
 update();
 </script>
 </body>
